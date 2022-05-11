@@ -1,50 +1,39 @@
 package demo.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.util.Date;
+
 @Entity
-@Table(name = "ORDER_TB")
+@Table(name = "order_tbl")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Order 
-{
+public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
-    private String name;
-    private int qty;
-    private double price;
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public int getQty() {
-		return qty;
-	}
-	public void setQty(int qty) {
-		this.qty = qty;
-	}
-	public double getPrice() {
-		return price;
-	}
-	public void setPrice(double price) {
-		this.price = price;
-	}
+    private String orderNo;
+    private String storeId;
+    private Date orderDate;
+    private Double orderAmount;
+    private String customerId;
+    private String billingAddress1;
+    private String billingAddress2;
+    private String billingState;
+    private String billingCountry;
+    private String billingAddressPincode;
+    private String billingPhone;
+    private String shippingAddress1;
+    private String shippingAddress2;
+    private String shippingState;
+    private String shippingCountry;
+    private String shippingAddressPincode;
+    private String shippingPhone;
+    private String orderStatus;
+    private Date lastUpdated;
+    private String LastUpdateBy;
 }

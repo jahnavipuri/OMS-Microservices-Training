@@ -1,13 +1,29 @@
 server:
-  port: 9192
+  port: 9196
 spring:
-  h2:    console:      enabled: true
-  config:    import: configserver:http://localhost:8888
+  h2:
+    console:
+      enabled: true
+      setting:
+        web-allow-others: true
+  config:
+    import: configserver:http://localhost:8888
   application:
     name: ORDER-SERVICE
         
-eureka:  client:    register-with-eureka: true
+eureka:
+  client:
+    register-with-eureka: true
     fetch-registry: true
     service-url:
       defaultZone: http://localhost:8761/eureka/
-  instance:    hostname: localhost
+
+  instance:
+    hostname: localhost
+
+spring.datasource.url: jdbc:h2:file:~/orders;AUTO_SERVER=true
+spring.datasource.username: root
+spring.datasource.password: root
+spring.datasource.driver-class-name: org.h2.Driver
+spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+spring.jpa.hibernate.ddl-auto: update

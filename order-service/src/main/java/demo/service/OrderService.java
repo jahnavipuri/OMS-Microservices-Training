@@ -22,19 +22,19 @@ public class OrderService
 	
 	public TransactionResponse saveOrder(TransactionRequest request)
 	{
-		String response = "";
-		Order order = request.getOrder();
-		Payment payment = request.getPayment();
-		payment.setOrderId(order.getId());
-		payment.setAmount(order.getPrice());
-		
-		Payment paymentResponse = template.postForObject("http://PAYMENT-SERVICE/payment/doPayment",payment,Payment.class);
-		
-		response = paymentResponse.getPaymentStatus().equals("success")?"payment processing successful":"there is a failure";
-		
-		repository.save(order);
-		
-//		return new TransactionResponse(order, paymentResponse.getAmount(), paymentResponse.getTransactionId(), response);
+//		String response = "";
+//		Order order = request.getOrder();
+//		Payment payment = request.getPayment();
+//		payment.setOrderId(order.getId());
+//		payment.setAmount(order.getPrice());
+//
+//		Payment paymentResponse = template.postForObject("http://PAYMENT-SERVICE/payment/doPayment",payment,Payment.class);
+//
+//		response = paymentResponse.getPaymentStatus().equals("success")?"payment processing successful":"there is a failure";
+//
+//		repository.save(order);
+//
+////		return new TransactionResponse(order, paymentResponse.getAmount(), paymentResponse.getTransactionId(), response);
 		return new TransactionResponse();	
 		}
 }
