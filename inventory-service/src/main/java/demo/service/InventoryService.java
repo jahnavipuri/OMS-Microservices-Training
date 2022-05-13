@@ -1,14 +1,18 @@
 package demo.service;
 
-import demo.dto.OrderItems;
+import demo.dto.OrderItem;
 import demo.dto.ProductCreateReqDto;
 import demo.entity.StoreInventory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import demo.repository.StoreInventoryRepository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
+@Transactional
 public class InventoryService {
     @Autowired
     private StoreInventoryRepository storeInventoryRepository;
@@ -26,23 +30,23 @@ public class InventoryService {
         return storeInventoryRepository.save(storeInventory);
     }
 
-    public void reserveProductsForOrder(OrderItems request) {
+    public void reserveProductsForOrder(List<OrderItem> request) {
         checkStockAvailability(request);
         updateStock(request);
     }
 
-    private void checkStockAvailability(OrderItems request) {
-        request.getOrderItems().forEach(orderItem -> {
+    private void checkStockAvailability(List<OrderItem> request) {
+        request.forEach(orderItem -> {
             StoreInventory stockInventory = storeInventoryRepository.
                     findByProductIdAndStoreId(orderItem.getProductId(), orderItem.getStoreId());
-            if (stockInventory.getQuantity() < orderItem.getQuantity()) {
-                throw new IllegalArgumentException("Stock unavailable for orderId" + orderItem.getProductId());
+            if (stockInventory==null || stockInventory.getQuantity() < orderItem.getQuantity()) {
+                throw new IllegalArgumentException("Stock unavailable for orderId " + orderItem.getProductId());
             }
         });
     }
 
-    private void updateStock(OrderItems request) {
-        request.getOrderItems().forEach(orderItem -> {
+    private void updateStock(List<OrderItem> request) {
+        request.forEach(orderItem -> {
             StoreInventory stockInventory = storeInventoryRepository.
                     findByProductIdAndStoreId(orderItem.getProductId(), orderItem.getStoreId());
             stockInventory.setQuantity(stockInventory.getQuantity() - orderItem.getQuantity());

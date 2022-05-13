@@ -1,13 +1,10 @@
 package demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import demo.common.*;
-import demo.common.TransactionRequest;
 import demo.service.OrderService;
 
 @RestController
@@ -17,10 +14,10 @@ public class OrderController
 	@Autowired
 	private OrderService service;
 	
-	@PostMapping("/bookOrder")
-	public TransactionResponse bookOrder(@RequestBody TransactionRequest request)
+	@PostMapping("/create")
+	public ResponseEntity<Void> createOrder(@RequestBody OrderRequest request)
 	{
-		System.out.println("test");
-		return service.saveOrder(request);
+		 service.createOrder(request);
+		 return ResponseEntity.ok().build();
 	}
 }

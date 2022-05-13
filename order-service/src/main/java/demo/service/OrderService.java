@@ -1,40 +1,60 @@
 package demo.service;
 
+import demo.common.OrderRequest;
+import demo.entity.Order;
+import demo.entity.OrderDetails;
+import demo.enums.OrderStatus;
+import demo.repository.OrderDetailsRepository;
+import demo.repository.OrderRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import demo.common.Payment;
-import demo.common.TransactionRequest;
-import demo.common.TransactionResponse;
-import demo.common.*;
-import demo.entity.Order;
-import demo.repository.OrderRepository;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-public class OrderService 
-{
-	@Autowired
-	private OrderRepository repository;
-	
-	@Autowired
-	private RestTemplate template;
-	
-	public TransactionResponse saveOrder(TransactionRequest request)
-	{
-//		String response = "";
-//		Order order = request.getOrder();
-//		Payment payment = request.getPayment();
-//		payment.setOrderId(order.getId());
-//		payment.setAmount(order.getPrice());
-//
-//		Payment paymentResponse = template.postForObject("http://PAYMENT-SERVICE/payment/doPayment",payment,Payment.class);
-//
-//		response = paymentResponse.getPaymentStatus().equals("success")?"payment processing successful":"there is a failure";
-//
-//		repository.save(order);
-//
-////		return new TransactionResponse(order, paymentResponse.getAmount(), paymentResponse.getTransactionId(), response);
-		return new TransactionResponse();	
-		}
+@Transactional
+public class OrderService {
+    public final String INVENTORY_SERVICE = "http://INVENTORY-SERVICE/inventory";
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private OrderDetailsRepository orderDetailsRepository;
+
+    @Autowired
+    private RestTemplate template;
+
+    public void createOrder(OrderRequest request) {
+        String url = INVENTORY_SERVICE + "/reserveProduct";
+        try {
+            ResponseEntity<Object> objectResponseEntity = template.postForEntity(url, request.getOrderItems(), Object.class);
+            if (objectResponseEntity.getStatusCodeValue() != 200) {
+                throw new IllegalArgumentException("Order not placed something is wrong");
+            }
+        } catch (HttpClientErrorException exception) {
+            throw new IllegalArgumentException(exception.getMessage());
+        }
+        Order order = new Order();
+        BeanUtils.copyProperties(request, order);
+        order.setOrderStatus(OrderStatus.CREATED);
+        order.setOrderDate(new Date());
+        Order createdOrder = orderRepository.save(order);
+
+
+        List<OrderDetails> orderItems = request.getOrderItems().stream().map(orderItem -> {
+            OrderDetails orderDetails = new OrderDetails();
+            BeanUtils.copyProperties(orderItem, orderDetails);
+            orderDetails.setOrderNo(createdOrder.getOrderNo());
+            return orderDetails;
+        }).collect(Collectors.toList());
+        orderDetailsRepository.saveAll(orderItems);
+    }
 }

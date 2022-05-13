@@ -16,10 +16,8 @@ public class ProductService {
     private ProductRepository productRepository;
     @Autowired
     private InventoryService inventoryService;
-
     @Autowired
     private StoreService storeService;
-
     @Autowired
     private StoreInventoryRepository storeInventoryRepository;
 

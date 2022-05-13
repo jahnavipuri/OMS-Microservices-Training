@@ -1,12 +1,12 @@
 package demo.entity;
 
+import demo.enums.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -16,24 +16,18 @@ import java.util.Date;
 @NoArgsConstructor
 public class Order {
     @Id
-    private String orderNo;
-    private String storeId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long orderNo;
+    @NotNull
     private Date orderDate;
+    @NotNull
     private Double orderAmount;
+    @NotNull
     private String customerId;
+    @NotNull
     private String billingAddress1;
-    private String billingAddress2;
-    private String billingState;
-    private String billingCountry;
-    private String billingAddressPincode;
-    private String billingPhone;
-    private String shippingAddress1;
-    private String shippingAddress2;
-    private String shippingState;
-    private String shippingCountry;
-    private String shippingAddressPincode;
-    private String shippingPhone;
-    private String orderStatus;
+    @NotNull
+    private OrderStatus orderStatus;
     private Date lastUpdated;
-    private String LastUpdateBy;
+    private String lastUpdateBy;
 }

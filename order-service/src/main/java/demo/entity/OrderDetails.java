@@ -1,10 +1,7 @@
 package demo.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,12 +16,19 @@ import java.util.Date;
 @NoArgsConstructor
 public class OrderDetails
 {
-    @Id
-    private String orderNo;
-    private String productId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long orderDetailsId;
+	@NotNull
+    private Long orderNo;
+	@NotNull
+    private Long productId;
+	@NotNull
 	private Integer quantity;
+	@NotNull
 	private Double price;
+	@NotNull
 	private String status;
 	private Date lastUpdated;
-	private String LastUpdateBy;
+	private String lastUpdateBy;
 }
