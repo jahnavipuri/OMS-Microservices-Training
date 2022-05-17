@@ -53,4 +53,7 @@ public class InventoryService {
         });
     }
 
+    public void cancelOrder(List<OrderItem> items) {
+
+    }
 }
