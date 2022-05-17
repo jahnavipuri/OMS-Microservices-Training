@@ -18,12 +18,13 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long orderNo;
+    private Long storeId;
     @NotNull
     private Date orderDate;
     @NotNull
     private Double orderAmount;
     @NotNull
-    private String customerId;
+    private Long customerId;
     @NotNull
     private String billingAddress1;
     @NotNull

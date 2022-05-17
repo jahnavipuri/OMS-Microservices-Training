@@ -7,15 +7,10 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
-public class OrderRequest {
+public class OrderUpdateRequest {
     @NotEmpty
     private List<OrderItem> orderItems;
     @NotNull
-    private Double orderAmount;
-    @NotNull
     private Long storeId;
-    @NotNull
-    private Long customerId;
-    @NotNull
-    private String billingAddress1;
+
 }
